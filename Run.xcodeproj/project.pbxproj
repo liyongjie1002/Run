@@ -15,6 +15,7 @@
 		B7BDB8CB23167A0100A26B12 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B7BDB8C923167A0100A26B12 /* LaunchScreen.storyboard */; };
 		B7BDB8CE23167A0100A26B12 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B7BDB8CD23167A0100A26B12 /* main.m */; };
 		B7BDB8D623167A1900A26B12 /* RunViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7BDB8D523167A1900A26B12 /* RunViewController.m */; };
+		B7BDB8D9231688C000A26B12 /* MDRunView.m in Sources */ = {isa = PBXBuildFile; fileRef = B7BDB8D8231688C000A26B12 /* MDRunView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,8 @@
 		B7BDB8CD23167A0100A26B12 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B7BDB8D423167A1900A26B12 /* RunViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RunViewController.h; sourceTree = "<group>"; };
 		B7BDB8D523167A1900A26B12 /* RunViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RunViewController.m; sourceTree = "<group>"; };
+		B7BDB8D7231688C000A26B12 /* MDRunView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MDRunView.h; sourceTree = "<group>"; };
+		B7BDB8D8231688C000A26B12 /* MDRunView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MDRunView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,13 +92,23 @@
 				B7BDB8BF23167A0000A26B12 /* AppDelegate.m */,
 				B7BDB8C123167A0000A26B12 /* ViewController.h */,
 				B7BDB8C223167A0000A26B12 /* ViewController.m */,
-				B7BDB8D423167A1900A26B12 /* RunViewController.h */,
-				B7BDB8D523167A1900A26B12 /* RunViewController.m */,
+				B7BDB8DA231688EF00A26B12 /* Run */,
 				B7BDB8C423167A0000A26B12 /* Main.storyboard */,
 				B7BDB8C723167A0100A26B12 /* Assets.xcassets */,
 				B7BDB8C923167A0100A26B12 /* LaunchScreen.storyboard */,
 				B7BDB8CC23167A0100A26B12 /* Info.plist */,
 				B7BDB8CD23167A0100A26B12 /* main.m */,
+			);
+			path = Run;
+			sourceTree = "<group>";
+		};
+		B7BDB8DA231688EF00A26B12 /* Run */ = {
+			isa = PBXGroup;
+			children = (
+				B7BDB8D423167A1900A26B12 /* RunViewController.h */,
+				B7BDB8D523167A1900A26B12 /* RunViewController.m */,
+				B7BDB8D7231688C000A26B12 /* MDRunView.h */,
+				B7BDB8D8231688C000A26B12 /* MDRunView.m */,
 			);
 			path = Run;
 			sourceTree = "<group>";
@@ -222,6 +235,7 @@
 				B7BDB8C323167A0000A26B12 /* ViewController.m in Sources */,
 				B7BDB8CE23167A0100A26B12 /* main.m in Sources */,
 				B7BDB8D623167A1900A26B12 /* RunViewController.m in Sources */,
+				B7BDB8D9231688C000A26B12 /* MDRunView.m in Sources */,
 				B7BDB8C023167A0000A26B12 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
