@@ -18,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0402E0522316977E00379E80 /* APIKey.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APIKey.h; sourceTree = "<group>"; };
 		19B372B6BB196A3FD95D4041 /* Pods-Run.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Run.debug.xcconfig"; path = "Target Support Files/Pods-Run/Pods-Run.debug.xcconfig"; sourceTree = "<group>"; };
 		1D80E10D12DC975F6ED1C39D /* Pods-Run.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Run.release.xcconfig"; path = "Target Support Files/Pods-Run/Pods-Run.release.xcconfig"; sourceTree = "<group>"; };
 		4CCA93B8C12BD441CE110A47 /* Pods_Run.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Run.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -91,6 +92,7 @@
 				B7BDB8C223167A0000A26B12 /* ViewController.m */,
 				B7BDB8D423167A1900A26B12 /* RunViewController.h */,
 				B7BDB8D523167A1900A26B12 /* RunViewController.m */,
+				0402E0522316977E00379E80 /* APIKey.h */,
 				B7BDB8C423167A0000A26B12 /* Main.storyboard */,
 				B7BDB8C723167A0100A26B12 /* Assets.xcassets */,
 				B7BDB8C923167A0100A26B12 /* LaunchScreen.storyboard */,
