@@ -30,7 +30,7 @@
 -(void)initLocationManager {
     self.locationManager = [[AMapLocationManager alloc] init];
     [self.locationManager setDelegate:self];
-    [self.locationManager setDistanceFilter:5];
+    [self.locationManager setDistanceFilter:10];
     // iOS 9（不包含iOS 9） 之前设置允许后台定位参数，保持不会被系统挂起
     [self.locationManager setPausesLocationUpdatesAutomatically:NO];
     [self.locationManager setAllowsBackgroundLocationUpdates:YES];
@@ -59,11 +59,11 @@
 - (void)amapLocationManager:(AMapLocationManager *)manager didUpdateLocation:(CLLocation *)location reGeocode:(AMapLocationReGeocode *)reGeocode {
     
     AudioServicesPlaySystemSound(1007);
-//    self.updateuLocationTimes++;
-//    NSInteger ignoreTimes = 2;
-//    if (self.updateuLocationTimes <= ignoreTimes) {
-//        return;
-//    }
+    self.updateuLocationTimes++;
+    NSInteger ignoreTimes = 2;
+    if (self.updateuLocationTimes <= ignoreTimes) {
+        return;
+    }
 
 //    // 滤波在处理慢速运行时，会出现路径端点与定位点连接不上的情况，所以在绘制路径时，将未处理过的当前点添加到数组的末尾，每次有新位置进行计算时，先将上一次数组末尾的点移除。
 //    if ([self.annotationRecordArray count] > 0) {

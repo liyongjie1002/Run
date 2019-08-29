@@ -99,12 +99,9 @@
     request.serviceID = self.trackManager.serviceID;
     request.terminalID = self.trackManager.terminalID;
     [self.trackManager AMapTrackAddTrack:request];
-    
-    // 开始采集
-
 }
-#pragma mark - AMapTrackManagerDelegate
 
+#pragma mark - AMapTrackManagerDelegate
 - (void)didFailWithError:(NSError *)error associatedRequest:(id)request {
    
     NSLog(@"didFailWithError:%@; --- associatedRequest:%@;", error, request);

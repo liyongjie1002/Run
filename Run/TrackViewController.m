@@ -17,6 +17,7 @@
 @property (nonatomic, strong) MAMapView             *mapView;
 
 @property (nonatomic, strong) UIView                *dataView;
+@property (nonatomic, strong) UIButton              *queryButton;
 @property (nonatomic, strong) UILabel               *mileLabel;
 @property (nonatomic, strong) UILabel               *speedLabel;
 @property (nonatomic, strong) UILabel               *timeLabel;
@@ -29,22 +30,7 @@
     
     [super viewDidLoad];
     [self configUI];
-    [self drawData];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    
-    [super viewWillAppear:animated];
-    if ([kAMapTrackServiceID length] <= 0 || [kAMapTrackTerminalID length] <= 0) {
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
-                                                        message:@"您需要指定ServiceID和TerminalID才可以使用轨迹服务"
-                                                       delegate:nil
-                                              cancelButtonTitle:@"OK"
-                                              otherButtonTitles:nil];
-        [alert show];
-        return;
-    }
+    [self initTrackManager];
 }
 
 - (void)configUI {
@@ -54,10 +40,25 @@
     [self.view addSubview:self.dataView];
 }
 
-- (void)drawData {
-
-    [self queryTrackInfoAction];
-    [self queryTrackHisAction];
+- (void)initTrackManager {
+    if ([kAMapTrackServiceID length] <= 0 || [kAMapTrackTerminalID length] <= 0) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
+                                                        message:@"您需要指定ServiceID和TerminalID才可以使用轨迹服务"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+    
+    AMapTrackManagerOptions *option = [[AMapTrackManagerOptions alloc] init];
+    option.serviceID = kAMapTrackServiceID;
+    self.trackManager = [[AMapTrackManager alloc] initWithOptions:option];
+    self.trackManager.delegate = self;
+    
+    //配置定位属性
+    [self.trackManager setAllowsBackgroundLocationUpdates:YES];
+    [self.trackManager setPausesLocationUpdatesAutomatically:NO];
 }
 
 #pragma mark - PrivateMethods
@@ -69,7 +70,7 @@
     request.terminalID = kAMapTrackTerminalID;
     request.startTime = ([[NSDate date] timeIntervalSince1970] - 12*60*60) * 1000;
     request.endTime = [[NSDate date] timeIntervalSince1970] * 1000;
-    request.recoupMode = AMapTrackRecoupModeDriving;
+//    request.recoupMode = AMapTrackRecoupModeDriving;
     [self.trackManager AMapTrackQueryTrackInfo:request];
 }
 
@@ -81,8 +82,7 @@
     request.terminalID = kAMapTrackTerminalID;
     request.startTime = ([[NSDate date] timeIntervalSince1970] - 12*60*60) * 1000;
     request.endTime = [[NSDate date] timeIntervalSince1970] * 1000;
-    request.recoupMode = AMapTrackRecoupModeDriving;
-    
+//    request.recoupMode = AMapTrackRecoupModeDriving;
     [self.trackManager AMapTrackQueryTrackHistoryAndDistance:request];
 }
 
@@ -114,7 +114,12 @@
     self.timeLabel.text = time;
     self.mileLabel.text = distance;
     self.speedLabel.text = speed;
-//    NSLog(@"距离：%ld米，时间：%@", track.distance, time);
+}
+
+- (void)queryButtonTarget {
+    
+    [self queryTrackInfoAction];
+    [self queryTrackHisAction];
 }
 
 //传入毫秒  得到 xx:xx:xx
@@ -193,30 +198,28 @@
     return _mapView;
 }
 
-- (AMapTrackManager *)trackManager {
-    if (!_trackManager) {
-        //Service ID 需要根据需要进行修改
-        AMapTrackManagerOptions *option = [[AMapTrackManagerOptions alloc] init];
-        option.serviceID = kAMapTrackServiceID;
-        
-        _trackManager = [[AMapTrackManager alloc]initWithOptions:option];
-        _trackManager.delegate = self;
-        _trackManager.allowsBackgroundLocationUpdates = YES;
-        _trackManager.pausesLocationUpdatesAutomatically = NO;
-    }
-    return _trackManager;
-}
-
 - (UIView *)dataView {
     if (!_dataView) {
         _dataView = [[UIView alloc]initWithFrame:CGRectMake(10, CGRectGetHeight(self.view.bounds)-200, CGRectGetWidth(self.view.bounds)-20, 190)];
         _dataView.backgroundColor = [UIColor orangeColor];
         
+        [_dataView addSubview:self.queryButton];
         [_dataView addSubview:self.mileLabel];
         [_dataView addSubview:self.speedLabel];
         [_dataView addSubview:self.timeLabel];
     }
     return _dataView;
+}
+
+-(UIButton *)queryButton {
+    if (!_queryButton) {
+        _queryButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _queryButton.backgroundColor = [UIColor cyanColor];
+        [_queryButton setTitle:@"查询" forState:UIControlStateNormal];
+        _queryButton.frame = CGRectMake(CGRectGetWidth(self.view.bounds)-90, 10, 60, 60);
+        [_queryButton addTarget:self action:@selector(queryButtonTarget) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _queryButton;
 }
 
 - (UILabel *)mileLabel {
@@ -241,6 +244,16 @@
         _timeLabel.backgroundColor = [UIColor whiteColor];
     }
     return _timeLabel;
+}
+
+- (void)dealloc {
+    [self.trackManager stopService];
+    self.trackManager.delegate = nil;
+    self.trackManager = nil;
+    
+    [self.mapView removeFromSuperview];
+    self.mapView.delegate = nil;
+    self.mapView = nil;
 }
 
 @end
