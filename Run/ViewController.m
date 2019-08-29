@@ -26,11 +26,24 @@
     [btn addTarget:self action:@selector(clickAction) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btn];
  
+    UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btn1 setTitle:@"轨迹" forState:UIControlStateNormal];
+    [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [btn1 setFrame:CGRectMake(100, 200, 100, 30)];
+    [btn1 addTarget:self action:@selector(clickAction1) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn1];
 }
 
 -(void)clickAction {
     RunViewController *run = [RunViewController new];
     [self.navigationController pushViewController:run animated:YES];
 }
+
+
+-(void)clickAction1 {
+    TrackViewController *run = [TrackViewController new];
+    [self.navigationController pushViewController:run animated:YES];
+}
+
 
 @end
