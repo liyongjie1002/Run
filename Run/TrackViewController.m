@@ -110,7 +110,7 @@
     NSLog(@"%@", track);
     NSString *time = [self getMMSSFromSS:[NSString stringWithFormat:@"%lld", track.lastingTime]];
     NSString *distance = [NSString stringWithFormat:@"%.2f公里", track.distance/1000.0];
-    NSString *speed = [NSString stringWithFormat:@"%f公里/小时",(track.distance/1000.0)/(track.lastingTime/3600000.0)];
+    NSString *speed = [NSString stringWithFormat:@"%.2f公里/小时",(track.distance/1000.0)/(track.lastingTime/3600000.0)];
     self.timeLabel.text = time;
     self.mileLabel.text = distance;
     self.speedLabel.text = speed;
@@ -147,28 +147,32 @@
     
     NSLog(@"onQueryTrackHistoryAndDistanceDone%@", response.formattedDescription);
     
-    if ([[response points] count] > 0) {
-        [self.mapView removeOverlays:[self.mapView overlays]];
-        [self showPolylineWithTrackPoints:[response points]];
-        [self.mapView showOverlays:self.mapView.overlays animated:NO];
-    }
+//    if ([[response points] count] > 0) {
+//        [self.mapView removeOverlays:[self.mapView overlays]];
+//        [self showPolylineWithTrackPoints:[response points]];
+//        [self.mapView showOverlays:self.mapView.overlays animated:NO];
+//    }
 }
 
 - (void)onQueryTrackInfoDone:(AMapTrackQueryTrackInfoRequest *)request response:(AMapTrackQueryTrackInfoResponse *)response {
     
     NSLog(@"onQueryTrackInfoDone%@", response.formattedDescription);
     
-    if (response.tracks.count > 0) {
-        AMapTrackBasicTrack *track = response.tracks[0];
-        [self setTrackInfo:track];
-    }
-
     [self.mapView removeOverlays:[self.mapView overlays]];
-    for (AMapTrackBasicTrack *track in response.tracks) {
+    if (response.tracks.count > 0) {
+        // 拿到最近24小时最新的一次轨迹,并划线
+        AMapTrackBasicTrack *track = response.tracks[response.tracks.count - 1];
         if ([[track points] count] > 0) {
             [self showPolylineWithTrackPoints:[track points]];
         }
+        [self setTrackInfo:track];
     }
+
+//    for (AMapTrackBasicTrack *track in response.tracks) {
+//        if ([[track points] count] > 0) {
+//            [self showPolylineWithTrackPoints:[track points]];
+//        }
+//    }
     [self.mapView showOverlays:self.mapView.overlays animated:NO];
 }
 
