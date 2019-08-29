@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
 @interface MDRunView : UIView
 
-@end
+- (void)setSpeed:(CGFloat)speed;
+- (void)setTime:(CGFloat)time;
+- (void)setDistance:(CGFloat)distance;
 
-NS_ASSUME_NONNULL_END
+@end
