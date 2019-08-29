@@ -105,9 +105,31 @@
 }
 
 // 给布局赋值
-- (void)setTrackInfo:(NSDictionary *)description {
+- (void)setTrackInfo:(AMapTrackBasicTrack *)track {
     
-    NSLog(@"%@", description);
+    NSLog(@"%@", track);
+    NSString *time = [self getMMSSFromSS:[NSString stringWithFormat:@"%lld", track.lastingTime]];
+    NSString *distance = [NSString stringWithFormat:@"%.2f公里", track.distance/1000.0];
+    NSString *speed = [NSString stringWithFormat:@"%f公里/小时",(track.distance/1000.0)/(track.lastingTime/3600000.0)];
+    self.timeLabel.text = time;
+    self.mileLabel.text = distance;
+    self.speedLabel.text = speed;
+//    NSLog(@"距离：%ld米，时间：%@", track.distance, time);
+}
+
+//传入毫秒  得到 xx:xx:xx
+-(NSString *)getMMSSFromSS:(NSString *)totalTime{
+    
+    NSInteger seconds = [totalTime integerValue]/1000;
+    //format of hour
+    NSString *str_hour = [NSString stringWithFormat:@"%02d",seconds/3600];
+    //format of minute
+    NSString *str_minute = [NSString stringWithFormat:@"%02d",(seconds%3600)/60];
+    //format of second
+    NSString *str_second = [NSString stringWithFormat:@"%02d",seconds%60];
+    //format of time
+    NSString *format_time = [NSString stringWithFormat:@"%@:%@:%@",str_hour,str_minute,str_second];
+    return format_time;
 }
 
 #pragma mark - AMapTrackManagerDelegate
@@ -131,13 +153,11 @@
     
     NSLog(@"onQueryTrackInfoDone%@", response.formattedDescription);
     
-    NSError *err;
-    NSData *jsonData = [response.formattedDescription dataUsingEncoding:NSUTF8StringEncoding];
-    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData
-                                                        options:NSJSONReadingMutableContainers
-                                                          error:&err];
-    [self setTrackInfo:dic];
-    
+    if (response.tracks.count > 0) {
+        AMapTrackBasicTrack *track = response.tracks[0];
+        [self setTrackInfo:track];
+    }
+
     [self.mapView removeOverlays:[self.mapView overlays]];
     for (AMapTrackBasicTrack *track in response.tracks) {
         if ([[track points] count] > 0) {
