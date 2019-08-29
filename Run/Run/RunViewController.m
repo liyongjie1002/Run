@@ -42,6 +42,7 @@
     self.navigationController.navigationBar.hidden = YES;
 }
 -(void)run {
+    self.runButton.enabled = NO;
 /*
  // 点击开始运动
  1. 开启轨迹追踪上传
@@ -86,26 +87,20 @@
     [self.trackManager setPausesLocationUpdatesAutomatically:NO];
 }
 
-/*开启轨迹服务 -> 开始轨迹采集*/
+/*开启轨迹服务 -> 创建trackID -> 开始轨迹采集*/
 -(void)startTrackService {
     //开始服务
     AMapTrackManagerServiceOption *serviceOption = [[AMapTrackManagerServiceOption alloc] init];
     serviceOption.terminalID = kAMapTrackTerminalID;
-    
     [self.trackManager startServiceWithOptions:serviceOption];
     
-    [self startTrackGather];
-}
--(void)startTrackGather {
-    if (self.trackManager == nil) {
-        return;
-    }
+    // 创建trackID
+    AMapTrackAddTrackRequest *request = [[AMapTrackAddTrackRequest alloc] init];
+    request.serviceID = self.trackManager.serviceID;
+    request.terminalID = self.trackManager.terminalID;
+    [self.trackManager AMapTrackAddTrack:request];
     
-    if ([self.trackManager.terminalID length] <= 0) {
-        NSLog(@"您需要先开始轨迹服务，才可以开始轨迹采集。");
-        return;
-    }
-    [self.trackManager startGatherAndPack];
+    // 开始采集
 
 }
 #pragma mark - AMapTrackManagerDelegate
@@ -190,7 +185,7 @@
         _runButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_runButton setTitle:@"开始运动" forState:UIControlStateNormal];
         [_runButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [_runButton setTitle:@"暂不能使用" forState:UIControlStateDisabled];
+        [_runButton setTitle:@"运动中" forState:UIControlStateDisabled];
         [_runButton setTitleColor:[UIColor redColor] forState:UIControlStateDisabled];
         [_runButton setFrame:CGRectMake(self.view.frame.size.width/2.0 - 50, 300, 100, 30)];
         [_runButton addTarget:self action:@selector(run) forControlEvents:UIControlEventTouchUpInside];
@@ -199,5 +194,14 @@
 }
 -(void)dealloc {
     
+    [self.trackManager stopService];
+    self.trackManager.delegate = nil;
+    self.trackManager = nil;
+    
+    self.locationManager.delegate = nil;
+    self.locationManager = nil;
+    
+    self.timeManager.delegate = nil;
+    self.timeManager = nil;
 }
 @end

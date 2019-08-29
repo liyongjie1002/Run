@@ -19,7 +19,6 @@
 
 @implementation MDTimeManager
 
-
 - (id)init
 {
     self = [super init];
